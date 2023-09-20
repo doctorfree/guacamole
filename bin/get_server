@@ -1,0 +1,17 @@
+#!/bin/bash
+
+TOP=$HOME/src/guacamole/src
+VER="1.5.3"
+SSRC="guacamole-server-${VER}.tar.gz"
+
+[ -d $TOP ] || mkdir -p $TOP
+
+cd $TOP
+
+[ -f ${SSRC} ] || {
+  wget http://mirror.cc.columbia.edu/pub/software/apache/guacamole/${VER}/source/${SSRC}
+}
+
+cd ..
+rm -rf guacamole-server-${VER}
+tar xzf src/${SSRC}

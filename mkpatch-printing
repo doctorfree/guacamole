@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DIR="guacamole-client"
+OUT="$HOME/src/patches-projects/guacamole-client/40-print-pdf.patch"
+
+FIL="guacamole/src/main/webapp/app/rest/services/tunnelService.js"
+MGC="guacamole/src/main/webapp/app/client/types/ManagedClient.js"
+
+cd ${DIR}
+rm -f ${OUT}
+touch ${OUT}
+
+diff -Naur ${FIL}.00 ${FIL} >> ${OUT}
+diff -Naur ${MGC}.00 ${MGC} >> ${OUT}

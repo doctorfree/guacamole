@@ -1,0 +1,10 @@
+#!/bin/bash
+
+sudo apt install tigervnc-standalone-server
+
+vncserver
+
+sudo vi /etc/guacamole/user-mapping.xml
+
+sudo systemctl restart tomcat9 guacd
+

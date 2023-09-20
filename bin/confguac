@@ -1,0 +1,41 @@
+#!/bin/bash
+
+CONFDIR=/etc/guacamole
+
+[ -d $CONFDIR ] || sudo mkdir $CONFDIR
+
+echo "# Hostname and port of guacamole proxy
+guacd-hostname: localhost
+guacd-port:     4822
+
+# Auth provider class (authenticates user/pass combination, needed if using the provided login screen)
+auth-provider: net.sourceforge.guacamole.net.basic.BasicFileAuthenticationProvider
+basic-user-mapping: $CONFDIR/user-mapping.xml" > /tmp/guacprops$$
+
+sudo cp /tmp/guacprops$$ $CONFDIR/guacamole.properties
+
+echo "Use the following command to generate an MD5 hash for your password:"
+echo ""
+echo "echo -n your_password | openssl md5"
+echo ""
+echo "Edit the file /etc/guacamole/user-mapping.xml and add the following:"
+echo ""
+echo "<user-mapping>
+
+    <!-- Per-user authentication and config information -->
+    <authorize
+         username="your_preferred_username"
+         password="1060b7b46a3bd36b3a0d66e0127d0517"
+         encoding="md5">
+      
+       <connection name="default">
+         <protocol>rdp</protocol>
+         <param name="hostname">localhost</param>
+         <param name="port">3389</param>
+         <param name="username">"${GUAC_USERNAME}"</param>
+         <param name="password">"${GUAC_PASSWORD}"</param>
+       </connection>
+    </authorize>
+
+</user-mapping>"
+echo ""

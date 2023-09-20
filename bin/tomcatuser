@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo vi /etc/tomcat9/tomcat-users.xml

@@ -1,0 +1,36 @@
+#!/bin/bash
+
+sudo apt install apache2
+sudo a2enmod proxy proxy_http headers proxy_wstunnel
+
+# Create a virtual host file for Guacamole.
+
+IP=`hostname -I`
+echo "<VirtualHost *:80>
+      ServerName ${IP}" > /tmp/guaconf$$
+echo '
+      ErrorLog ${APACHE_LOG_DIR}/guacamole_error.log
+      CustomLog ${APACHE_LOG_DIR}/guacamole_access.log combined
+
+      <Location />
+          Require all granted
+          ProxyPass http://localhost:8080/guacamole/ flushpackets=on
+          ProxyPassReverse http://localhost:8080/guacamole/
+      </Location>
+
+     <Location /websocket-tunnel>
+         Require all granted
+         ProxyPass ws://localhost:8080/guacamole/websocket-tunnel
+         ProxyPassReverse ws://localhost:8080/guacamole/websocket-tunnel
+     </Location>
+
+     Header always unset X-Frame-Options
+</VirtualHost>' >> /tmp/guaconf$$
+
+sudo cp /tmp/guaconf$$ /etc/apache2/sites-available/guacamole.conf
+rm -f /tmp/guaconf$$
+
+sudo apachectl -t
+
+sudo a2ensite guacamole.conf
+sudo systemctl restart apache2

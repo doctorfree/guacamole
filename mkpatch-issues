@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DIR="guacamole-client"
+OUT="$HOME/src/patches-projects/guacamole-client/10-print-issues.patch"
+
+ISS="Known_Issues.txt"
+POM="pom.xml"
+
+cd ${DIR}
+rm -f ${OUT}
+touch ${OUT}
+
+diff -Naur ${ISS}.00 ${ISS} >> ${OUT}
+diff -Naur ${POM}.00 ${POM} >> ${OUT}

@@ -1,0 +1,86 @@
+#!/bin/bash
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install openjdk-11-jdk
+sudo useradd -r -m -U -d /opt/tomcat -s /bin/false tomcat
+
+# Tomcat 9 is in Ubuntu repo
+sudo apt install tomcat9 tomcat9-admin tomcat9-common tomcat9-user
+sudo systemctl enable tomcat9
+sudo ufw allow from any to any port 8080 proto tcp
+
+[ -d /usr/share/tomcat9 ] && {
+    cd /usr/share/tomcat9
+    sudo ln -s /etc/guacamole .guacamole
+}
+
+# Tomcat 10 is available for download
+# wget https://downloads.apache.org/tomcat/tomcat-10/v10.1.10/bin/apache-tomcat-10.1.10.tar.gz
+# sudo tar xzf apache-tomcat-*.tar.gz -C /opt/tomcat
+# sudo chown -R tomcat: /opt/tomcat
+# sudo sh -c 'chmod +x /opt/tomcat/bin/*.sh'
+#
+# Tomcat setup:
+#
+# sudo vi /opt/tomcat/conf/tomcat-users.xml
+#
+# <!-- user manager can access only the manager section -->
+# <role rolename="manager-gui" />
+# <user username="manager" password="_SECRET_PASSWORD_" roles="manager-gui" />
+#  
+# <!-- user admin can access manager and admin section both -->
+# <role rolename="admin-gui" />
+# <user username="admin" password="_SECRET_PASSWORD_" roles="manager-gui,admin-gui" />
+#
+# sudo vi /opt/tomcat/webapps/manager/META-INF/context.xml
+#
+# <Context antiResourceLocking="false" privileged="true" >
+#   <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
+#                    sameSiteCookies="strict" />
+#   <!-- <Valve className="org.apache.catalina.valves.RemoteAddrValve"
+#          allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
+#   ...
+# </Context>
+#
+# sudo vi /opt/tomcat/webapps/host-manager/META-INF/context.xml
+#
+# <Context antiResourceLocking="false" privileged="true" >
+#   <CookieProcessor className="org.apache.tomcat.util.http.Rfc6265CookieProcessor"
+#                    sameSiteCookies="strict" />
+#   <!--<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+#          allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /> -->
+#   ...
+# </Context>
+#
+# sudo vi /etc/systemd/system/tomcat.service
+#
+# [Unit]
+# Description=Apache Tomcat 10 Web Application Server
+# After=network.target
+#  
+# [Service]
+# Type=forking
+#  
+# User=tomcat
+# Group=tomcat
+#  
+# Environment="JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64"
+# Environment="CATALINA_HOME=/opt/tomcat"
+# Environment="CATALINA_BASE=/opt/tomcat"
+# Environment="CATALINA_PID=/opt/tomcat/temp/tomcat.pid"
+# Environment="CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC"
+#  
+# ExecStart=/opt/tomcat/bin/startup.sh
+# ExecStop=/opt/tomcat/bin/shutdown.sh
+#  
+# [Install]
+# WantedBy=multi-user.target
+#
+# sudo systemctl daemon-reload
+# sudo systemctl start tomcat
+# sudo systemctl status tomcat
+# sudo systemctl enable tomcat
+#
+# sudo ufw allow 8080
+#
+# open http://localhost:8080/

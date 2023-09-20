@@ -1,0 +1,26 @@
+#!/bin/bash
+
+echo "[Unit]
+Description=a wrapper to launch an X server for VNC
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=rrecord
+Group=rrecord
+WorkingDirectory=/home/rrecord
+
+ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+ExecStart=/usr/bin/vncserver -depth 24 -geometry 1280x800 -localhost :%i
+ExecStop=/usr/bin/vncserver -kill :%i
+
+[Install]
+WantedBy=multi-user.target" > /tmp/vnc$$
+
+sudo cp /tmp/vnc$$ /etc/systemd/system/vncserver@.service
+sudo rm -f /tmp/vnc$$
+
+vncserver -kill :1
+
+sudo systemctl start vncserver@1.service
+sudo systemctl enable vncserver@1.service

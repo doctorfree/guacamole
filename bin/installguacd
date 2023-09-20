@@ -1,0 +1,11 @@
+#!/bin/bash
+
+TOP=$HOME/src/guacamole
+
+cd $TOP/guacamole-server-1.2.0
+sudo make install 2>&1 | tee ../make-install-out.log
+sudo ldconfig
+sudo systemctl daemon-reload
+
+# Remote printing over RDP with Guacamole requires Ghostscript
+sudo apt-get install ghostscript

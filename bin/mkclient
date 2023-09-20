@@ -1,0 +1,6 @@
+#!/bin/bash
+
+TOP=$HOME/src/guacamole
+
+cd $TOP/guacamole-client-1.2.0
+sudo mvn package 2>&1 | tee ../make-client-out.log

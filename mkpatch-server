@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DIR="guacamole-server"
+OUT="$HOME/src/patches-projects/guacamole-server/40-print-pdf.patch"
+
+GSP="src/protocols/rdp/print-job.c"
+GPN="src/protocols/rdp/channels/rdpdr/rdpdr-printer.h"
+
+cd ${DIR}
+rm -f ${OUT}
+touch ${OUT}
+
+diff -Naur ${GSP}.00 ${GSP} > ${OUT}
+diff -Naur ${GPN}.00 ${GPN} >> ${OUT}

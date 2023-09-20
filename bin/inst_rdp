@@ -1,0 +1,13 @@
+#!/bin/bash
+
+sudo apt install xrdp
+
+sudo systemctl enable xrdp
+
+sudo ufw allow from any to any port 3389 proto tcp
+
+sudo vi /etc/guacamole/user-mapping.xml
+
+sudo adduser xrdp ssl-cert
+
+sudo systemctl start xrdp

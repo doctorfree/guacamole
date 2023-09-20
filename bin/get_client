@@ -1,0 +1,15 @@
+#!/bin/bash
+
+TOP=$HOME/src/guacamole/src
+VER="1.5.3"
+CSRC="guacamole-client-${VER}.tar.gz"
+
+[ -d $TOP ] || mkdir -p $TOP
+cd $TOP
+[ -f ${CSRC} ] || {
+  wget https://github.com/apache/guacamole-client/archive/${VER}.tar.gz
+  mv ${VER}.tar.gz ${CSRC}
+}
+cd ..
+rm -rf guacamole-client-${VER}
+tar xzf src/${CSRC}

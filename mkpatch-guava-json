@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DIR="guacamole-client"
+OUT="/tmp/10-auth-json-pom.patch"
+
+FIL="extensions/guacamole-auth-json/pom.xml"
+
+cd ${DIR}
+rm -f ${OUT}
+touch ${OUT}
+
+diff -Naur ${FIL}.00 ${FIL} >> ${OUT}

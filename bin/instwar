@@ -1,0 +1,18 @@
+#!/bin/bash
+
+TOP=$HOME/src/guacamole
+WEB=/var/lib/tomcat9/webapps
+WAR=$TOP/guacamole-client-1.2.0/guacamole/target/guacamole-1.2.0.war
+
+[ -f $WAR ] || {
+    echo "$WAR does not exist or is not readable. Exiting."
+    exit 1
+}
+[ -d $WEB ] || {
+    echo "$WEB does not exist or is not a directory. Exiting."
+    exit 1
+}
+
+sudo cp $WAR /var/lib/tomcat9/webapps/guacamole.war
+
+sudo systemctl restart tomcat9 guacd
